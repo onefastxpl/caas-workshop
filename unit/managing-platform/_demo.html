@@ -124,11 +124,12 @@
 
     <div id="content" class="container">
         <article>
-            <h1 id="managing-workloads">Managing Workloads</h1>
+ 
+            <h1 id="managing-containers">Managing Contaianers</h1>
 
-            <h2 id="goal">Goal</h2>
+            <h2 id="goal">Goals</h2>
 
-            <p>Be able to deploy and manage advanced kubernetes workloads on PKS.</p>
+            <p>Download kubectl from PivNet. Push a container from DockerHub to a PKS cluster. Push a container from Harbor. Create new K8s namespaces and loadbalancers.</p>
 
             <h2 id="prerequisites">Prerequisites</h2>
 
@@ -154,12 +155,74 @@
                 <li>From the kubectl CLI execute: <code>kubectl get nodes</code> to verify that you have access to the cluster.</li>
             </ol>
 
-            <h2 id="elastic-search">Deploy Elastic Search</h2>
+            <h2 id="deploy-container">Deploy a container image from DockerHub:</h2>
+            <ol>
+                <li>Create the following yml file:</li>
+                <pre>apiVersion: apps/v1
+                    kind: Deployment
+                    metadata:
+                    name: nginx-deployment
+                    labels:
+                        app: nginx
+                    spec:
+                    replicas: 3
+                    selector:
+                        matchLabels:
+                        app: nginx
+                    template:
+                        metadata:
+                        labels:
+                            app: nginx
+                        spec:
+                        containers:
+                        - name: nginx
+                            image: nginx:1.7.9
+                            ports:
+                            - containerPort: 80</pre>
+                <li>Save as nginx-deployment.yml</li>
+                <li>From kubectl CLI execute: <code>kubectl create -f nginx-deployment.yml</code></li>
+            </ol>
+
+            <h2 id="harbor">Deploy and manage container images with harbor.</h2>
+            <ol>
+                <li>Download java app from tbd.</li>
+                <li>Create the following dockerfile:</li>
+                <pre>FROM java:7
+                    COPY . /usr/src/myapp
+                    WORKDIR /usr/src/myapp
+                    RUN javac Main.java
+                    CMD ["java", "Main"]</pre>
+                <li>Save as dockerfile</li>
+                <li>Build the image by executing: <code>docker build dockerfile</code></li>
+                <li>Tag the image by executing: <code>docker tag java:7 workshop:java</code></li>
+                <li>Log into Harbor: <code>docker login HARBOR_URL</code></li>
+                    <ul>
+                        <li><strong>HARBOR_URL</strong> is the URL or IP address of your harbor instance.</li>
+                    </ul>
+                <li>Push the image to harbor by executing: <code>docker push workshop:java</code></li>
+                <li>Log into the Harbor user interface by going to https://HARBOR_URL</li>
+                    <ul>
+                        <li><strong>HARBOR_URL</strong> is the URL or IP address of your harbor instance.</li>
+                    </ul>
+                <li>Walk thru Harbor scans. TBD</li>
+            </ol>
+
+            <h2 id="sign-container">Sign a container image with Harbor</h2>
             <ol>
                 <li>tbd
             </ol>
 
-            <h2 id="post-deploy">Configure Custom Bosh Post-Deploy Scripts</h2>
+            <h2 id="k8s-namespace">Create a new Kubernetes namespace</h2>
+            <ol>
+                <li>tbd
+            </ol>
+
+            <h2 id="microsegmentation">Container Microsegmentation</h2>
+            <ol>
+                <li>tbd
+            </ol>
+
+            <h2 id="load-balancer">Create a servivce with a load balancer.</h2>
             <ol>
                 <li>tbd
             </ol>
